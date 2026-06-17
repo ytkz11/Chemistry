@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>初中化学双人PK</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 开始界面 -->
+  <div id="start-screen">
+    <h1>初中化学 双人PK</h1>
+    <p class="subtitle">化合价 · 离子符号 · 化学方程式</p>
+    <div class="topics">
+      <span class="topic-tag">化合价 70题</span>
+      <span class="topic-tag">离子符号 65题</span>
+      <span class="topic-tag">化学方程式 65题</span>
+    </div>
+    <p class="subtitle">200题随机打乱 · 同题同步 · 限时60秒</p>
+    <button class="btn-start" id="btn-start">开始PK</button>
+  </div>
+
+  <!-- 游戏界面 -->
+  <div id="game-screen">
+    <div class="top-bar">
+      <div class="question-info">
+        <span id="q-number">第 1 / 200 题</span>
+        <span id="q-category" style="margin-left:12px;padding:4px 12px;border-radius:10px;background:#e8f0fe;color:#1a73e8;font-weight:600;font-size:13px;"></span>
+      </div>
+      <div class="timer" id="timer">1:00</div>
+    </div>
+    <div class="arena">
+      <!-- 左边玩家 -->
+      <div class="player-side p1">
+        <div class="player-header">
+          <span>玩家1 (左)</span>
+          <div class="player-score">
+            <span class="score-correct">正确 <span id="p1-correct">0</span></span>
+            <span class="score-wrong">错误 <span id="p1-wrong">0</span></span>
+          </div>
+        </div>
+        <div class="question-box"></div>
+        <div class="options"></div>
+      </div>
+      <!-- 右边玩家 -->
+      <div class="player-side p2">
+        <div class="player-header">
+          <span>玩家2 (右)</span>
+          <div class="player-score">
+            <span class="score-correct">正确 <span id="p2-correct">0</span></span>
+            <span class="score-wrong">错误 <span id="p2-wrong">0</span></span>
+          </div>
+        </div>
+        <div class="question-box"></div>
+        <div class="options"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结果界面 -->
+  <div id="result-screen">
+    <h1>比赛结束</h1>
+    <p class="winner-text" id="winner-text"></p>
+    <div class="result-cards">
+      <div class="result-card p1">
+        <h2>玩家1 (左)</h2>
+        <div class="final-score" id="p1-final">0</div>
+        <div class="result-detail">
+          <span class="rd-correct">正确 <span id="p1-detail-correct">0</span></span>
+          <span class="rd-wrong">错误 <span id="p1-detail-wrong">0</span></span>
+          <span>作答 <span id="p1-detail-total">0</span></span>
+        </div>
+      </div>
+      <div class="result-card p2">
+        <h2>玩家2 (右)</h2>
+        <div class="final-score" id="p2-final">0</div>
+        <div class="result-detail">
+          <span class="rd-correct">正确 <span id="p2-detail-correct">0</span></span>
+          <span class="rd-wrong">错误 <span id="p2-detail-wrong">0</span></span>
+          <span>作答 <span id="p2-detail-total">0</span></span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-restart" id="btn-restart">再来一局</button>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

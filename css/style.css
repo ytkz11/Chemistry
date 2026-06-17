@@ -1,0 +1,260 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --p1: #1a73e8;
+  --p1-light: #e8f0fe;
+  --p2: #ea4335;
+  --p2-light: #fce8e6;
+  --green: #34a853;
+  --red: #ea4335;
+  --bg: #f5f5f5;
+}
+
+body {
+  font-family: -apple-system, "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* ===== 开始界面 ===== */
+#start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 24px;
+}
+#start-screen h1 {
+  font-size: 48px;
+  color: var(--p1);
+}
+#start-screen .subtitle {
+  font-size: 20px;
+  color: #666;
+}
+#start-screen .topics {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+#start-screen .topic-tag {
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: var(--p1-light);
+  color: var(--p1);
+  font-size: 16px;
+  font-weight: 600;
+}
+.btn-start {
+  padding: 20px 64px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--p1);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: transform 0.1s;
+}
+.btn-start:active { transform: scale(0.95); }
+
+/* ===== 游戏界面 ===== */
+#game-screen {
+  display: none;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 10;
+}
+.timer {
+  font-size: 36px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.timer.danger { color: var(--red); animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0.5; } }
+
+.question-info {
+  font-size: 16px;
+  color: #666;
+}
+
+/* ===== 左右分栏 ===== */
+.arena {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.player-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+}
+
+.player-side.p1 { background: var(--p1-light); border-right: 3px solid var(--p1); }
+.player-side.p2 { background: var(--p2-light); border-left: 3px solid var(--p2); }
+
+.player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 18px;
+}
+.p1 .player-header { background: var(--p1); color: #fff; }
+.p2 .player-header { background: var(--p2); color: #fff; }
+
+.player-score {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+}
+.score-correct { color: var(--green); }
+.score-wrong { color: var(--red); }
+
+.question-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 18px;
+  line-height: 1.6;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-btn {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 17px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  touch-action: manipulation;
+}
+.option-btn:active { transform: scale(0.97); }
+.option-btn:hover { border-color: var(--p1); background: #f0f7ff; }
+
+.p2 .option-btn:hover { border-color: var(--p2); background: #fff0ee; }
+
+.option-btn.selected-correct {
+  border-color: var(--green);
+  background: #e6f4ea;
+  color: var(--green);
+  font-weight: 700;
+}
+.option-btn.selected-wrong {
+  border-color: var(--red);
+  background: #fce8e6;
+  color: var(--red);
+  font-weight: 700;
+}
+.option-btn.show-correct {
+  border-color: var(--green);
+  background: #e6f4ea;
+}
+.option-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ===== 结果界面 ===== */
+#result-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 32px;
+  padding: 24px;
+}
+#result-screen h1 { font-size: 42px; }
+
+.result-cards {
+  display: flex;
+  gap: 40px;
+}
+.result-card {
+  padding: 32px 48px;
+  border-radius: 20px;
+  text-align: center;
+  min-width: 220px;
+}
+.result-card.p1 { background: var(--p1-light); border: 3px solid var(--p1); }
+.result-card.p2 { background: var(--p2-light); border: 3px solid var(--p2); }
+
+.result-card h2 { font-size: 24px; margin-bottom: 12px; }
+.result-card .final-score { font-size: 64px; font-weight: 800; }
+.result-card.p1 .final-score { color: var(--p1); }
+.result-card.p2 .final-score { color: var(--p2); }
+
+.result-detail {
+  display: flex;
+  gap: 24px;
+  margin-top: 12px;
+  font-size: 16px;
+}
+.result-detail span { font-weight: 600; }
+.rd-correct { color: var(--green); }
+.rd-wrong { color: var(--red); }
+
+.winner-text {
+  font-size: 36px;
+  font-weight: 800;
+}
+.winner-text.draw { color: #f9ab00; }
+
+.btn-restart {
+  padding: 16px 48px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--p1);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.btn-restart:active { transform: scale(0.95); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 800px) {
+  .arena { flex-direction: column; }
+  .player-side.p1 { border-right: none; border-bottom: 3px solid var(--p1); }
+  .player-side.p2 { border-left: none; border-top: 3px solid var(--p2); }
+  .result-cards { flex-direction: column; gap: 16px; }
+  #start-screen h1 { font-size: 32px; }
+  .timer { font-size: 28px; }
+  .question-box { font-size: 15px; }
+  .option-btn { font-size: 14px; padding: 12px; }
+}
