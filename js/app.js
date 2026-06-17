@@ -1,11 +1,10 @@
 const GAME_TIME = 60;
 
 let questions = [];
-let p1 = { answered: 0, correct: 0, wrong: 0, locked: false };
-let p2 = { answered: 0, correct: 0, wrong: 0, locked: false };
+let p1 = { idx: 0, answered: 0, correct: 0, wrong: 0, locked: false };
+let p2 = { idx: 0, answered: 0, correct: 0, wrong: 0, locked: false };
 let timer = null;
 let timeLeft = GAME_TIME;
-let qIndex = 0;
 
 function shuffle(arr) {
   const a = [...arr];
@@ -18,17 +17,17 @@ function shuffle(arr) {
 
 function startGame() {
   questions = shuffle(QUESTIONS);
-  qIndex = 0;
   timeLeft = GAME_TIME;
-  p1 = { answered: 0, correct: 0, wrong: 0, locked: false };
-  p2 = { answered: 0, correct: 0, wrong: 0, locked: false };
+  p1 = { idx: 0, answered: 0, correct: 0, wrong: 0, locked: false };
+  p2 = { idx: 0, answered: 0, correct: 0, wrong: 0, locked: false };
 
   document.getElementById('start-screen').style.display = 'none';
   document.getElementById('result-screen').style.display = 'none';
   document.getElementById('game-screen').style.display = 'flex';
 
   updateScores();
-  renderQuestion();
+  renderQuestion('p1');
+  renderQuestion('p2');
   startTimer();
 }
 
@@ -49,41 +48,37 @@ function startTimer() {
   }, 1000);
 }
 
-function renderQuestion() {
-  if (qIndex >= questions.length) {
-    endGame();
+function renderQuestion(player) {
+  const state = player === 'p1' ? p1 : p2;
+  const side = document.querySelector(`.${player}`);
+
+  if (state.idx >= questions.length) {
+    side.querySelector('.question-box').textContent = '已完成所有题目!';
+    side.querySelector('.options').innerHTML = '';
     return;
   }
 
-  const q = questions[qIndex];
-  document.getElementById('q-number').textContent = `第 ${qIndex + 1} / ${questions.length} 题`;
-  document.getElementById('q-category').textContent = q.cat;
+  const q = questions[state.idx];
+  const numEl = side.closest('.player-side').querySelector('.q-num');
+  if (numEl) numEl.textContent = `第 ${state.idx + 1} / ${questions.length} 题`;
 
-  const optsHtml = q.opts.map((opt, i) =>
+  side.querySelector('.question-box').textContent = q.q;
+  side.querySelector('.options').innerHTML = q.opts.map((opt, i) =>
     `<button class="option-btn" data-idx="${i}">${String.fromCharCode(65 + i)}. ${opt}</button>`
   ).join('');
 
-  document.querySelector('.p1 .question-box').textContent = q.q;
-  document.querySelector('.p1 .options').innerHTML = optsHtml;
-  document.querySelector('.p2 .question-box').textContent = q.q;
-  document.querySelector('.p2 .options').innerHTML = optsHtml;
+  state.locked = false;
 
-  p1.locked = false;
-  p2.locked = false;
-
-  document.querySelectorAll('.p1 .option-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleAnswer('p1', parseInt(btn.dataset.idx)));
-  });
-  document.querySelectorAll('.p2 .option-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleAnswer('p2', parseInt(btn.dataset.idx)));
+  side.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', () => handleAnswer(player, parseInt(btn.dataset.idx)));
   });
 }
 
 function handleAnswer(player, idx) {
-  if (player === 'p1' && p1.locked) return;
-  if (player === 'p2' && p2.locked) return;
+  const state = player === 'p1' ? p1 : p2;
+  if (state.locked || state.idx >= questions.length) return;
 
-  const q = questions[qIndex];
+  const q = questions[state.idx];
   const isCorrect = idx === q.ans;
   const side = document.querySelector(`.${player}`);
   const btns = side.querySelectorAll('.option-btn');
@@ -96,24 +91,16 @@ function handleAnswer(player, idx) {
     if (bIdx === idx && isCorrect) btn.classList.add('selected-correct');
   });
 
-  if (player === 'p1') {
-    p1.locked = true;
-    p1.answered++;
-    if (isCorrect) p1.correct++; else p1.wrong++;
-  } else {
-    p2.locked = true;
-    p2.answered++;
-    if (isCorrect) p2.correct++; else p2.wrong++;
-  }
+  state.locked = true;
+  state.answered++;
+  if (isCorrect) state.correct++; else state.wrong++;
 
   updateScores();
 
-  if (p1.locked && p2.locked) {
-    setTimeout(() => {
-      qIndex++;
-      renderQuestion();
-    }, 600);
-  }
+  setTimeout(() => {
+    state.idx++;
+    renderQuestion(player);
+  }, 500);
 }
 
 function updateScores() {
